@@ -23,7 +23,7 @@ primeSumPairs n =
   fmap mkPairSum
     (filter isPrimeSum
       (flatMap (\i ->
-        map (\j -> (i, j)) [1..(i - 1)])
+        map (\j -> (i, j)) [1..((-) i 1)])
       [1..n]))
 
 primeSumPairs' :: Integer -> [PairSum]
