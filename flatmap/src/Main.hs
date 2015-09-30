@@ -2,7 +2,6 @@ module Main where
 
 import Data.List (unfoldr)
 import Data.Maybe (listToMaybe)
-import Control.Monad (join)
 
 type PairSum = (Integer, Integer, Integer)
 
