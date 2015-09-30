@@ -2,22 +2,31 @@ module Main where
 
 import Data.List (unfoldr)
 import Data.Maybe (listToMaybe)
+import Control.Monad (join)
+
+type PairSum = (Integer, Integer, Integer)
 
 main :: IO ()
-main = do
-  print $ isPrimeSum (1, 2)
+main = print $ primeSumPairs 10
 
 isPrimeSum :: (Integer, Integer) -> Bool
 isPrimeSum (x, y) = isPrime (x + y)
 
+mkPairSum :: (Integer, Integer) -> PairSum
+mkPairSum (x, y) = (x, y, x + y)
+
+primeSumPairs :: Integer -> [PairSum]
+primeSumPairs n =
+  mkPairSum <$> filter isPrimeSum [(i, j) | i <- [1..n], j <- [1..(i - 1)]]
+
+-- ------------------------------
 -- Implementing `prime?` from 1.3
+-- ------------------------------
+isPrime :: Integer -> Bool
+isPrime n = n > 1 && factors n == [n]
 
 factors :: Integer -> [Integer]
 factors n = unfoldr (\(d,n) -> listToMaybe [(x, (x, div n x)) | n > 1,
                            x <- [d .. isqrt n] ++ [n], rem n x == 0]) (2,n)
-
-isPrime :: Integer -> Bool
-isPrime n = n > 1 && factors n == [n]
-
 isqrt :: Integer -> Integer
 isqrt n = floor . sqrt . fromIntegral $ n
