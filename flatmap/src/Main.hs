@@ -7,7 +7,7 @@ import Control.Monad (join)
 type PairSum = (Integer, Integer, Integer)
 
 main :: IO ()
-main = print $ primeSumPairs 10
+main = print $ primeSumPairs' 10
 
 isPrimeSum :: (Integer, Integer) -> Bool
 isPrimeSum (x, y) = isPrime (x + y)
@@ -15,8 +15,32 @@ isPrimeSum (x, y) = isPrime (x + y)
 mkPairSum :: (Integer, Integer) -> PairSum
 mkPairSum (x, y) = (x, y, x + y)
 
+flatMap :: Monad m => (a -> m b) -> m a -> m b
+flatMap = (=<<)
+
 primeSumPairs :: Integer -> [PairSum]
 primeSumPairs n =
+  fmap mkPairSum
+    (filter isPrimeSum
+      (flatMap (\i ->
+        map (\j -> (i, j)) [1..(i - 1)])
+      [1..n]))
+
+primeSumPairs' :: Integer -> [PairSum]
+primeSumPairs' n =
+  mkPairSum <$> filter isPrimeSum
+      ([1..n] >>= (\i -> [1..(n - 1)] >>= (\j -> pure (i, j))))
+
+primeSumPairs'' :: Integer -> [PairSum]
+primeSumPairs'' n =
+  mkPairSum <$>
+    filter isPrimeSum
+      (do i <- [1..n]
+          j <- [1..(i - 1)]
+          return (i, j))
+
+primeSumPairs''' :: Integer -> [PairSum]
+primeSumPairs''' n =
   mkPairSum <$> filter isPrimeSum [(i, j) | i <- [1..n], j <- [1..(i - 1)]]
 
 -- ------------------------------
