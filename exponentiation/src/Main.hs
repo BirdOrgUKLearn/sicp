@@ -4,7 +4,7 @@ module Main where
 import Criterion.Main
 
 square :: Integer -> Integer
-square x = x * x
+square x = (*) x x
 
 expt :: Integer -> Integer -> Integer
 expt b n = case n of

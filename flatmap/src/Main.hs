@@ -19,7 +19,7 @@ flatMap = (=<<)
 
 primeSumPairs :: Integer -> [PairSum]
 primeSumPairs n =
-  fmap mkPairSum
+  map mkPairSum
     (filter isPrimeSum
       (flatMap (\i ->
         map (\j -> (i, j)) [1..((-) i 1)])
